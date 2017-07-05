@@ -10,6 +10,8 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.korzh.user.threadstest.MainActivity;
 import com.korzh.user.threadstest.R;
@@ -18,8 +20,16 @@ import java.io.IOException;
 
 public class ServicePlayer extends Service {
 
+    private static final String TAG = "ServicePlayer";
+
+    public static final String ACTION  = "player.action.music";
+    public static final String KEY  = "player.position";
+
     private NotificationManager notificationManager;
     private MediaPlayer mediaPlayer;
+    private LocalBroadcastManager localBroadcastManager;
+
+    private boolean sendBroadcastIntent = true;
 
     @Override
     public void onCreate() {
@@ -50,6 +60,8 @@ public class ServicePlayer extends Service {
                 mediaPlayer.setDataSource(url);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
+                sendBroadcastIntent = true;
+                listenPlayer();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -62,6 +74,7 @@ public class ServicePlayer extends Service {
             mediaPlayer.stop();
             mediaPlayer = null;
             showNotification(R.drawable.ic_stop, "Stop", false);
+            sendBroadcastIntent = false;
         }
     }
 
@@ -80,10 +93,35 @@ public class ServicePlayer extends Service {
     }
 
 
+    private void listenPlayer(){
+        new Thread(() -> {
+            while(sendBroadcastIntent){
+                try {
+                    Thread.sleep(300);
+                    sendBroadcastEvent(mediaPlayer.getCurrentPosition());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        mediaPlayer.getCurrentPosition();
+    }
+
+    private void sendBroadcastEvent(int currentPosition) {
+        Intent intent = new Intent(ACTION);
+        intent.putExtra(KEY, currentPosition);
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         notificationManager.cancel(R.string.app_name);
+    }
+
+    public void setLocalBroadcastManager(LocalBroadcastManager localBroadcastManager) {
+        this.localBroadcastManager = localBroadcastManager;
     }
 
     class LocalBinder extends Binder {

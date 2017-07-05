@@ -2,23 +2,43 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context="com.korzh.user.threadstest.MainActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/bt_play"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/ic_play"/>
+    <SeekBar
+        android:id="@+id/sb_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:max="304456"/>
 
-    <Button
-        android:id="@+id/bt_stop"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/ic_stop"/>
+    <TextView
+        android:id="@+id/tx_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:context="com.korzh.user.threadstest.MainActivity">
+
+        <Button
+            android:id="@+id/bt_play"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/ic_play"/>
+
+        <Button
+            android:id="@+id/bt_stop"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/ic_stop"/>
+
+    </LinearLayout>
 </LinearLayout>
+
