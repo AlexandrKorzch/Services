@@ -7,6 +7,9 @@ import android.util.Log;
 
 import com.korzh.user.threadstest.callback.PositionCallBack;
 
+import static com.korzh.user.threadstest.service.ServicePlayer.ACTION_PLAY;
+import static com.korzh.user.threadstest.service.ServicePlayer.ACTION_POSITION;
+import static com.korzh.user.threadstest.service.ServicePlayer.ACTION_STOP;
 import static com.korzh.user.threadstest.service.ServicePlayer.KEY;
 
 /**
@@ -20,8 +23,21 @@ public class PlayerBroadCast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int position = intent.getExtras().getInt(KEY);
-        positionCallBack.onGetPosition(position);
+
+        switch(intent.getAction()){
+            case ACTION_POSITION:{
+                positionCallBack.onGetPosition(intent.getExtras().getInt(KEY));
+                break;
+            }           
+            case ACTION_PLAY:{
+                //// TODO: 06.07.17  
+                break;
+            }           
+            case ACTION_STOP:{
+                break;
+            }
+        }
+        
     }
 
     public void setPositionCallBack(PositionCallBack positionCallBack) {

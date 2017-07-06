@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void registerReceiver(){
         IntentFilter filter=new IntentFilter();
-        filter.addAction(ServicePlayer.ACTION);
+        filter.addAction(ServicePlayer.ACTION_POSITION);
+        filter.addAction(ServicePlayer.ACTION_PLAY);
+        filter.addAction(ServicePlayer.ACTION_STOP);
         mLocalBroadcastManager.registerReceiver(playerBroadCast , filter);
     }
 
