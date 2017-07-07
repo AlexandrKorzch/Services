@@ -10,14 +10,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.korzh.user.threadstest.broadcast.PlayerBroadCast;
-import com.korzh.user.threadstest.callback.PositionCallBack;
 import com.korzh.user.threadstest.service.ServicePlayer;
 
 import static com.korzh.user.threadstest.service.ServiceBinder.doBindService;
 import static com.korzh.user.threadstest.service.ServiceBinder.doUnbindService;
 import static com.korzh.user.threadstest.service.ServiceBinder.getPlayerServiceIntent;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -34,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.bt_play).setOnClickListener(this);
         findViewById(R.id.bt_stop).setOnClickListener(this);
 
-        SeekBar seekBar = (SeekBar)findViewById(R.id.sb_progress);
-        TextView textPosition = (TextView)findViewById(R.id.tx_time);
+        SeekBar seekBar = (SeekBar) findViewById(R.id.sb_progress);
+        TextView textPosition = (TextView) findViewById(R.id.tx_time);
 
 
         playerBroadCast = new PlayerBroadCast();
@@ -53,18 +52,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setUpdateByProgressLogic(SeekBar seekBar, TextView textPosition) {
         playerBroadCast.setPositionCallBack(position -> {
-            Log.d(TAG, "onCreate: position - "+position);
+            Log.d(TAG, "onCreate: position - " + position);
             seekBar.setProgress(position);
 
-            int progressInSeconds = position/1000;
-            int min = progressInSeconds/60;
-            int sec = progressInSeconds%60;
-            String time = min+":"+sec;
+            int progressInSeconds = position / 1000;
+            int min = progressInSeconds / 60;
+            int sec = progressInSeconds % 60;
+            String time = min + ":" + sec;
 
             textPosition.setText(time);
         });
     }
-
 
     @Override
     protected void onResume() {
@@ -78,26 +76,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         unregisterReceiver();
     }
 
-    private void registerReceiver(){
-        IntentFilter filter=new IntentFilter();
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
         filter.addAction(ServicePlayer.ACTION_POSITION);
-        filter.addAction(ServicePlayer.ACTION_PLAY);
-        filter.addAction(ServicePlayer.ACTION_STOP);
-        mLocalBroadcastManager.registerReceiver(playerBroadCast , filter);
+        mLocalBroadcastManager.registerReceiver(playerBroadCast, filter);
     }
 
-    private void unregisterReceiver(){
+    private void unregisterReceiver() {
         mLocalBroadcastManager.unregisterReceiver(playerBroadCast);
     }
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.bt_play:{
+        switch (view.getId()) {
+            case R.id.bt_play: {
                 playerService.play();
                 break;
             }
-            case R.id.bt_stop:{
+            case R.id.bt_stop: {
                 playerService.stop();
                 break;
             }
